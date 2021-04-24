@@ -1,0 +1,100 @@
+﻿@model MortgageCalc.Models.Loan
+
+@{
+}
+
+<h1>Mortgage Loan Calculator</h1>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <form asp-controller="Home" asp-action="App" method="post">
+                <!--USER INPUT DATA-->
+                <div class="form-group">
+                    <label asp-for="Amount">Loan Amount</label>
+                    <input type="number" asp-for="Amount" class="form-control zeroBlank" placeholder="Enter Loan Amount" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Term">Term (in Months)</label>
+                    <input type="number" asp-for="Term" class="form-control" placeholder="Enter Loan Term" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rate">Interest Rate %</label>
+                    <input type="text" asp-for="Rate" class="form-control" placeholder="Enter Interest Rate" />
+                </div>
+                <button type="submit" class="btn btn-dark">Calculate</button>
+            </form>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class=""row">
+                     <div class="col loansummary">
+                         <div class="col loanSummary">
+                             <div id="summaryTitle">
+                                 <h4 style="text-align:center">Your Monthly Payment</h4>
+                             </div>
+                             <h4 style="text-align:center" id="monthlyPayment">
+                                @Model.Payment.ToString("C")
+                             </h4>
+                             <div class="col text-center">
+                                 <div class="row h4">Total Principal</div>
+                                 <div class="row h5 text-success font-weight-bolder">
+                                     @Model.Amount.ToString("C")
+                                 </div>
+                             </div>
+
+                             <div class="col text-center">
+                                 <div class="row h4">Total Interest</div>
+                                 <div class="row h5 text-success font-weight-bolder">
+                                     @Model.TotalInterest.ToString("C")
+                                 </div>
+                             </div>
+
+                             <div class="col text-center">
+                                 <div class="row h4">Total Cost</div>
+                                 <div class="row h5 text-success font-weight-bolder">
+                                     @((Model.Amount+Model.TotalInterest).ToString("C"))
+                                 </div>
+                             </div>
+                         </div>
+                     </div>   
+                </div>"
+            </div>
+        </div>
+
+        <hr />
+        @if (Model.Payments.Count() > 0)
+        {
+            <table class="table-striped table-hover table table-dark">
+                <thead style="text-align:center">
+                    <tr>
+                        <th colspan="7">Loan Payments</th>
+                    <tr style="text-align:center">
+                        <th>MONTH</th>
+                        <th>MONTHLY PAYMENT</th>
+                        <th>MONTHLY PRINCIPAL</th>
+                        <th>MONTHLY INTEREST</th>
+                        <th>TOTAL INTEREST</th>
+                        <th>BALANCE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var payment in Model.Payments)
+                    {
+                        <tr>
+                            <td>@payment.Month</td>
+                            <td>@Model.Payment.ToString("C")</td>
+                            <td>@payment.MonthlyPrincipal.ToString("C")</td>
+                            <td>@payment.MonthlyInterest.ToString("C")</td>
+                            <td>@payment.TotalInterest.ToString("C")</td>
+                            <td>@payment.Balance.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        }
+    </div>
+</div>
